@@ -1,0 +1,1 @@
+import{a as s,j as e}from"./index-_VWp950p.js";import{B as r}from"./blog-posts-BlaWcjzH.js";import"./layout-_NrrbpvU.js";function p(){const{category:o,posts:t}=s.useLoaderData();return e.jsx(r,{title:o,posts:t})}export{p as component};

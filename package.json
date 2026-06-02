@@ -1,5 +1,5 @@
 {
-  "name": "blog",
+  "name": "terra-incognita",
   "private": true,
   "type": "module",
   "scripts": {
@@ -37,5 +37,10 @@
     "typescript": "5.9.3",
     "rimraf": "6.1.3",
     "vite": "7.3.3"
-  }
+  },
+  "description": "Незалежне журналістське видання про місця, події та людей, яких офіційна історія воліє замовчати. Розслідування, аномалії, закриті міста УРСР, зниклі поселення.",
+  "version": "2.0.0",
+  "main": "content-colections.ts",
+  "author": "Trigon",
+  "license": "UNLICENSED"
 }

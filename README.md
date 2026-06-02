@@ -39,6 +39,7 @@ featured: false  # true для головного матеріалу
 ```
 
 Тіло статті — звичайний markdown. Підтримуються HTML-блоки для спеціальних елементів:
+
 - `<div class="doc-box">...</div>` — архівний документ
 - `<div class="witness-block">...</div>` — свідчення очевидця
 - `<blockquote class="pullquote">...</blockquote>` — цитата

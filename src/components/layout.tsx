@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { href: '/category/Закриті міста УРСР', label: 'Архів УРСР' },
   { href: '/category/Зниклі поселення', label: 'Зниклі поселення' },
   { href: '/category/Хімія та містика', label: 'Хімія' },
+  { href: '/novoyavorivsk-mysteries', label: 'Новояворівськ' },
 ]
 
 function formatDate(dateStr: string) {
