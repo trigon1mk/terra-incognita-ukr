@@ -75,7 +75,7 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
 
         {rest.length > 0 && (
           <>
-            <div className="section-label" style={{ marginTop: 48 }}>
+            <div className="section-label all-materials">
               {isHome ? 'Всі матеріали' : 'Інші публікації'}
             </div>
             <div className="articles-grid">
@@ -95,7 +95,7 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
         )}
 
         {posts.length === 0 && (
-          <p style={{ color: 'var(--fog)', fontFamily: 'Space Mono, monospace', fontSize: 14 }}>
+          <p className="no-posts">
             Матеріалів у цій рубриці поки немає.
           </p>
         )}

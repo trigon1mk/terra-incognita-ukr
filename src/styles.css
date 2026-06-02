@@ -801,6 +801,17 @@ body::before {
   line-height: 1.5;
 }
 
+/* ── ARTICLE SECTION LABELS ── */
+.section-label.all-materials {
+  margin-top: 48px;
+}
+
+.no-posts {
+  color: var(--fog);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+}
+
 /* ── BACK LINK ── */
 .back-link {
   font-family: 'Space Mono', monospace;
