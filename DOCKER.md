@@ -55,8 +55,8 @@ docker-compose up -d --build
   - Запускає `npm run build` який створює `dist/client` та `dist/server`
 - **Production stage**: Мінімальний образ з лише необхідними файлами
   - Копіює білд: `dist/server` та `dist/client`
-  - Копіює публічні файли та залежності
-  - Запускає сервер з `dist/server/index.js`
+  - Копіює публічні файли, залежності та `server-bridge.mjs`
+  - Запускає сервер за допомогою `server-bridge.mjs` (WHATWG to Node bridge)
 - **Non-root user**: nodejs (для безпеки)
 - **Health check**: Автоматична перевірка доступності сервісу кожні 30 секунд
 
@@ -128,7 +128,7 @@ npm run dev
 
 ```bash
 npm run build
-node dist/server/index.js
+node server-bridge.mjs
 ```
 
 ### Тестування Docker образу локально
@@ -163,7 +163,7 @@ dist/
 ├── client/          # Клієнтська частина (HTML, CSS, JS, асети)
 │   └── assets/      # Бандлені JS та CSS
 ├── server/          # SSR сервер для TanStack Start
-│   └── index.js     # Entry point (запускається в Docker)
+│   └── server.js    # Entry point (запускається через bridge)
 └── public/          # Статичні файли
 ```
 

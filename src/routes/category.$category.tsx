@@ -23,6 +23,8 @@ export const Route = createFileRoute('/category/$category')({
 })
 
 function RouteComponent() {
-  const { category, posts } = Route.useLoaderData()
+  const data = Route.useLoaderData()
+  if (!data) return null
+  const { category, posts } = data
   return <BlogPosts title={category} posts={posts} />
 }

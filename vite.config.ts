@@ -5,9 +5,11 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import netlify from '@netlify/vite-plugin-tanstack-start'
 import contentCollections from '@content-collections/vite'
+import { imagetools } from 'vite-imagetools'
 
 const config = defineConfig({
   plugins: [
+    imagetools(),
     contentCollections(),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],

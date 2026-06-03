@@ -1,8 +1,12 @@
 import { jsx } from "react/jsx-runtime";
-import { b as allPosts } from "./router-W1L3Z6l5.js";
-import { B as BlogPosts } from "./blog-posts-mysCKyWX.js";
+import { a as allPosts } from "./router-BlmVjKJO.js";
+import { B as BlogPosts } from "./blog-posts-9SKgTC-y.js";
 import "@tanstack/react-router";
-import "./layout-DA_p23f6.js";
+import "react";
+import "lucide-react";
+import "fuse.js";
+import "marked";
+import "marked-gfm-heading-id";
 function App() {
   const sorted = [...allPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   return /* @__PURE__ */ jsx(BlogPosts, { title: "ТемнаГеографія", posts: sorted });

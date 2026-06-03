@@ -1,13 +1,16 @@
 import { Link } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
+import { Search as SearchIcon } from 'lucide-react'
+import { SearchModal } from './search'
 
 const NAV_LINKS = [
-  { href: '/category/Розслідування', label: 'Розслідування' },
-  { href: '/category/Аномалії', label: 'Аномалії' },
-  { href: '/category/Закриті міста УРСР', label: 'Архів УРСР' },
-  { href: '/category/Зниклі поселення', label: 'Зниклі поселення' },
-  { href: '/category/Хімія та містика', label: 'Хімія' },
-  { href: '/novoyavorivsk-mysteries', label: 'Новояворівськ' },
-]
+  { to: '/category/$category', params: { category: 'Розслідування' }, label: 'Розслідування' },
+  { to: '/category/$category', params: { category: 'Аномалії' }, label: 'Аномалії' },
+  { to: '/category/$category', params: { category: 'Закриті міста УРСР' }, label: 'Архів УРСР' },
+  { to: '/category/$category', params: { category: 'Зниклі поселення' }, label: 'Зниклі поселення' },
+  { to: '/category/$category', params: { category: 'Хімія та містика' }, label: 'Хімія' },
+  { to: '/novoyavorivsk-mysteries', label: 'Новояворівськ' },
+] as const
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr)
@@ -15,27 +18,59 @@ function formatDate(dateStr: string) {
 }
 
 export function Masthead() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const today = new Date().toLocaleDateString('uk-UA', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setIsSearchOpen(true)
+      }
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
-    <header className="masthead">
-      <Link to="/" className="masthead-logo">
-        Темна<span>Географія</span>
-      </Link>
-      <nav>
-        <ul className="masthead-nav">
-          {NAV_LINKS.map((l) => (
-            <li key={l.href}>
-              <Link to={l.href}>{l.label}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <span className="masthead-date">{today}</span>
-    </header>
+    <>
+      <header className="masthead">
+        <Link to="/" className="masthead-logo">
+          Темна<span>Географія</span>
+        </Link>
+        <nav>
+          <ul className="masthead-nav">
+            {NAV_LINKS.map((l) => (
+              <li key={l.label}>
+                <Link to={l.to} params={'params' in l ? l.params : undefined}>
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className="flex items-center gap-6">
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="text-fog hover:text-sulfur transition-colors flex items-center gap-2 group"
+          >
+            <span className="text-[10px] font-mono uppercase tracking-widest hidden md:inline opacity-0 group-hover:opacity-100 transition-opacity">
+              Пошук
+            </span>
+            <SearchIcon className="w-4 h-4" />
+          </button>
+          <span className="masthead-date hidden sm:inline">{today}</span>
+        </div>
+      </header>
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   )
 }
 
@@ -56,8 +91,10 @@ export function SiteFooter() {
           <h5>Рубрики</h5>
           <ul>
             {NAV_LINKS.map((l) => (
-              <li key={l.href}>
-                <Link to={l.href}>{l.label}</Link>
+              <li key={l.label}>
+                <Link to={l.to} params={'params' in l ? l.params : undefined}>
+                  {l.label}
+                </Link>
               </li>
             ))}
           </ul>

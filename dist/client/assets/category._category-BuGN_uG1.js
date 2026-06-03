@@ -1,0 +1,1 @@
+import{b as e,j as n}from"./index-gQvJqfQw.js";import{B as r}from"./blog-posts-BGrTSV03.js";function m(){const t=e.useLoaderData();if(!t)return null;const{category:o,posts:s}=t;return n.jsx(r,{title:o,posts:s})}export{m as component};

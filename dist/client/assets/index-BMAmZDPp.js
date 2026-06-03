@@ -1,1 +1,0 @@
-import{b as s,j as r}from"./index-_VWp950p.js";import{B as a}from"./blog-posts-BlaWcjzH.js";import"./layout-_NrrbpvU.js";function i(){const t=[...s].sort((o,e)=>new Date(e.date).getTime()-new Date(o.date).getTime());return r.jsx(a,{title:"ТемнаГеографія",posts:t})}export{i as component};

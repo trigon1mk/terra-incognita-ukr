@@ -1,51 +1,10 @@
-import { createRootRoute, HeadContent, Scripts, createFileRoute, lazyRouteComponent, createRouter } from "@tanstack/react-router";
-import { jsxs, jsx } from "react/jsx-runtime";
-const SITE_NAME = "ТемнаГеографія";
-const SITE_DESCRIPTION = "Незалежне журналістське видання про місця, події та людей, яких офіційна історія воліє замовчати. Розслідування, аномалії, закриті міста УРСР.";
-const Route$3 = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: `${SITE_NAME} — Темна географія України` },
-      { name: "description", content: SITE_DESCRIPTION },
-      { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large" },
-      { name: "language", content: "uk" },
-      { name: "author", content: "Редакція ТемнаГеографія" },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: SITE_NAME },
-      { property: "og:title", content: `${SITE_NAME} — Темна географія України` },
-      { property: "og:description", content: SITE_DESCRIPTION },
-      { property: "og:locale", content: "uk_UA" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: `${SITE_NAME} — Темна географія України` },
-      { name: "twitter:description", content: SITE_DESCRIPTION }
-    ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
-      },
-      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }
-    ]
-  }),
-  shellComponent: RootDocument
-});
-function RootDocument({ children }) {
-  return /* @__PURE__ */ jsxs("html", { lang: "uk", children: [
-    /* @__PURE__ */ jsx("head", { children: /* @__PURE__ */ jsx(HeadContent, {}) }),
-    /* @__PURE__ */ jsxs("body", { children: [
-      children,
-      /* @__PURE__ */ jsx(Scripts, {})
-    ] })
-  ] });
-}
-const $$splitComponentImporter$2 = () => import("./index-BN5R6OPS.js");
-const Route$2 = createFileRoute("/")({
-  component: lazyRouteComponent($$splitComponentImporter$2, "component")
-});
+import { Link, createRootRoute, HeadContent, Scripts, createFileRoute, lazyRouteComponent, createRouter } from "@tanstack/react-router";
+import { jsxs, jsx, Fragment } from "react/jsx-runtime";
+import { useState, useMemo, useEffect } from "react";
+import { Search, X } from "lucide-react";
+import Fuse from "fuse.js";
+import { marked } from "marked";
+import { gfmHeadingId } from "marked-gfm-heading-id";
 const allPosts = [
   {
     "title": "Дніпропетровськ-95: місто, якого офіційно не існувало",
@@ -464,40 +423,287 @@ H₂S є предметом активних нейробіологічних д
     }
   }
 ];
-const $$splitComponentImporter$1 = () => import("./posts._slug-DCEB4Qiy.js");
+function SearchModal({ isOpen, onClose }) {
+  const [query, setQuery] = useState("");
+  const fuse = useMemo(() => {
+    return new Fuse(allPosts, {
+      keys: ["title", "summary", "content", "categories"],
+      threshold: 0.3
+    });
+  }, []);
+  const results = useMemo(() => {
+    if (!query) return [];
+    return fuse.search(query).slice(0, 5);
+  }, [query, fuse]);
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[2000] flex items-start justify-center pt-[10vh] px-4", children: [
+    /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-pitch/90 backdrop-blur-sm", onClick: onClose }),
+    /* @__PURE__ */ jsxs("div", { className: "relative w-full max-w-2xl bg-ash border border-smoke shadow-2xl shadow-black", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center p-4 border-bottom border-smoke", children: [
+        /* @__PURE__ */ jsx(Search, { className: "w-5 h-5 text-sulfur mr-3" }),
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            autoFocus: true,
+            type: "text",
+            placeholder: "Шукати в архівах...",
+            className: "flex-1 bg-transparent border-none outline-none text-parchment font-serif text-xl",
+            value: query,
+            onChange: (e) => setQuery(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ jsx("button", { onClick: onClose, className: "p-2 text-fog hover:text-sulfur transition-colors", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+      ] }),
+      results.length > 0 && /* @__PURE__ */ jsx("div", { className: "max-height-[60vh] overflow-auto border-top border-smoke", children: results.map(({ item: post }) => /* @__PURE__ */ jsxs(
+        Link,
+        {
+          to: "/posts/$slug",
+          params: { slug: post.slug },
+          onClick: onClose,
+          className: "block p-6 hover:bg-smoke transition-colors group",
+          children: [
+            /* @__PURE__ */ jsx("div", { className: "text-xs font-mono text-sulfur-dark mb-1 uppercase tracking-widest", children: post.categories[0] }),
+            /* @__PURE__ */ jsx("div", { className: "text-lg font-serif font-bold text-parchment group-hover:text-sulfur transition-colors", children: post.title }),
+            /* @__PURE__ */ jsx("p", { className: "text-sm text-fog line-clamp-1 italic mt-1", children: post.summary })
+          ]
+        },
+        post.slug
+      )) }),
+      query && results.length === 0 && /* @__PURE__ */ jsx("div", { className: "p-10 text-center text-fog italic font-serif", children: "За вашим запитом документів не знайдено." }),
+      /* @__PURE__ */ jsxs("div", { className: "p-3 bg-pitch/50 border-top border-smoke flex justify-between items-center px-6", children: [
+        /* @__PURE__ */ jsxs("div", { className: "text-[10px] font-mono text-fog uppercase tracking-tighter", children: [
+          "Пошук у ",
+          allPosts.length,
+          " матеріалах"
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "text-[10px] font-mono text-fog uppercase tracking-tighter", children: "Esc для виходу" })
+      ] })
+    ] })
+  ] });
+}
+const NAV_LINKS = [
+  { to: "/category/$category", params: { category: "Розслідування" }, label: "Розслідування" },
+  { to: "/category/$category", params: { category: "Аномалії" }, label: "Аномалії" },
+  { to: "/category/$category", params: { category: "Закриті міста УРСР" }, label: "Архів УРСР" },
+  { to: "/category/$category", params: { category: "Зниклі поселення" }, label: "Зниклі поселення" },
+  { to: "/category/$category", params: { category: "Хімія та містика" }, label: "Хімія" },
+  { to: "/novoyavorivsk-mysteries", label: "Новояворівськ" }
+];
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("uk-UA", { day: "numeric", month: "long", year: "numeric" });
+}
+function Masthead() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const today = (/* @__PURE__ */ new Date()).toLocaleDateString("uk-UA", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+      if (e.key === "Escape") {
+        setIsSearchOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("header", { className: "masthead", children: [
+      /* @__PURE__ */ jsxs(Link, { to: "/", className: "masthead-logo", children: [
+        "Темна",
+        /* @__PURE__ */ jsx("span", { children: "Географія" })
+      ] }),
+      /* @__PURE__ */ jsx("nav", { children: /* @__PURE__ */ jsx("ul", { className: "masthead-nav", children: NAV_LINKS.map((l) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, { to: l.to, params: "params" in l ? l.params : void 0, children: l.label }) }, l.label)) }) }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-6", children: [
+        /* @__PURE__ */ jsxs(
+          "button",
+          {
+            onClick: () => setIsSearchOpen(true),
+            className: "text-fog hover:text-sulfur transition-colors flex items-center gap-2 group",
+            children: [
+              /* @__PURE__ */ jsx("span", { className: "text-[10px] font-mono uppercase tracking-widest hidden md:inline opacity-0 group-hover:opacity-100 transition-opacity", children: "Пошук" }),
+              /* @__PURE__ */ jsx(Search, { className: "w-4 h-4" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx("span", { className: "masthead-date hidden sm:inline", children: today })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(SearchModal, { isOpen: isSearchOpen, onClose: () => setIsSearchOpen(false) })
+  ] });
+}
+function SiteFooter() {
+  return /* @__PURE__ */ jsxs("footer", { className: "site-footer", children: [
+    /* @__PURE__ */ jsxs("div", { className: "footer-inner", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsxs("div", { className: "footer-brand", children: [
+          "Темна",
+          /* @__PURE__ */ jsx("span", { children: "Географія" })
+        ] }),
+        /* @__PURE__ */ jsx("p", { className: "footer-desc", children: "Незалежне журналістське видання про місця, події та людей, яких офіційна історія воліє замовчати. Базуємося у Львові. Пишемо українською." })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "footer-col", children: [
+        /* @__PURE__ */ jsx("h5", { children: "Рубрики" }),
+        /* @__PURE__ */ jsx("ul", { children: NAV_LINKS.map((l) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, { to: l.to, params: "params" in l ? l.params : void 0, children: l.label }) }, l.label)) })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "footer-col", children: [
+        /* @__PURE__ */ jsx("h5", { children: "Видання" }),
+        /* @__PURE__ */ jsxs("ul", { children: [
+          /* @__PURE__ */ jsx("li", { children: "Про нас" }),
+          /* @__PURE__ */ jsx("li", { children: "Редакційна політика" }),
+          /* @__PURE__ */ jsx("li", { children: "Написати до редакції" }),
+          /* @__PURE__ */ jsx("li", { children: "Підтримати проєкт" })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "footer-bottom", children: [
+      /* @__PURE__ */ jsx("span", { children: "© 2026 ТемнаГеографія. Усі права захищено." }),
+      /* @__PURE__ */ jsx("span", { className: "footer-copyright-trigon", children: "Trigon 2026 · Авторські права захищено" }),
+      /* @__PURE__ */ jsx("span", { children: "Матеріали захищені авторським правом України" })
+    ] })
+  ] });
+}
+function NotFound() {
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen flex flex-col", children: [
+    /* @__PURE__ */ jsx(Masthead, {}),
+    /* @__PURE__ */ jsx("main", { className: "flex-1 flex items-center justify-center py-20 px-4", children: /* @__PURE__ */ jsxs("div", { className: "max-w-md w-full text-center", children: [
+      /* @__PURE__ */ jsx("div", { className: "font-mono text-sulfur text-6xl mb-6", children: "404" }),
+      /* @__PURE__ */ jsx("h1", { className: "text-4xl font-serif font-bold mb-4 text-parchment", children: "Сторінку не знайдено" }),
+      /* @__PURE__ */ jsx("p", { className: "text-fog mb-10 italic", children: "Можливо, цей документ було вилучено з архіву, або ви намагаєтесь отримати доступ до засекреченої зони." }),
+      /* @__PURE__ */ jsx(
+        Link,
+        {
+          to: "/",
+          className: "inline-block border border-sulfur text-sulfur px-8 py-3 font-mono text-sm uppercase tracking-widest hover:bg-sulfur hover:text-pitch transition-colors",
+          children: "Повернутися на головну"
+        }
+      )
+    ] }) }),
+    /* @__PURE__ */ jsx(SiteFooter, {})
+  ] });
+}
+function ErrorComponent({ error }) {
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen flex flex-col", children: [
+    /* @__PURE__ */ jsx(Masthead, {}),
+    /* @__PURE__ */ jsx("main", { className: "flex-1 flex items-center justify-center py-20 px-4", children: /* @__PURE__ */ jsxs("div", { className: "max-w-md w-full text-center", children: [
+      /* @__PURE__ */ jsx("div", { className: "font-mono text-blood text-6xl mb-6", children: "!" }),
+      /* @__PURE__ */ jsx("h1", { className: "text-4xl font-serif font-bold mb-4 text-parchment", children: "Системна помилка" }),
+      /* @__PURE__ */ jsx("p", { className: "text-fog mb-6 italic", children: "Стався критичний збій при завантаженні даних. Спробуйте оновити сторінку або поверніться пізніше." }),
+      /* @__PURE__ */ jsx("pre", { className: "text-left bg-ash p-4 mb-10 overflow-auto text-xs text-fog border border-smoke", children: error.message }),
+      /* @__PURE__ */ jsx(
+        Link,
+        {
+          to: "/",
+          className: "inline-block border border-sulfur text-sulfur px-8 py-3 font-mono text-sm uppercase tracking-widest hover:bg-sulfur hover:text-pitch transition-colors",
+          children: "На головну"
+        }
+      )
+    ] }) }),
+    /* @__PURE__ */ jsx(SiteFooter, {})
+  ] });
+}
+const SITE_NAME = "ТемнаГеографія";
+const SITE_DESCRIPTION = "Незалежне журналістське видання про місця, події та людей, яких офіційна історія воліє замовчати. Розслідування, аномалії, закриті міста УРСР.";
+const Route$4 = createRootRoute({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: `${SITE_NAME} — Темна географія України` },
+      { name: "description", content: SITE_DESCRIPTION },
+      { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large" },
+      { name: "language", content: "uk" },
+      { name: "author", content: "Редакція ТемнаГеографія" },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:title", content: `${SITE_NAME} — Темна географія України` },
+      { property: "og:description", content: SITE_DESCRIPTION },
+      { property: "og:locale", content: "uk_UA" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: `${SITE_NAME} — Темна географія України` },
+      { name: "twitter:description", content: SITE_DESCRIPTION }
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      },
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }
+    ]
+  }),
+  errorComponent: ErrorComponent,
+  notFoundComponent: NotFound,
+  shellComponent: RootDocument
+});
+function RootDocument({ children }) {
+  return /* @__PURE__ */ jsxs("html", { lang: "uk", children: [
+    /* @__PURE__ */ jsx("head", { children: /* @__PURE__ */ jsx(HeadContent, {}) }),
+    /* @__PURE__ */ jsxs("body", { children: [
+      children,
+      /* @__PURE__ */ jsx(Scripts, {})
+    ] })
+  ] });
+}
+const $$splitComponentImporter$3 = () => import("./novoyavorivsk-mysteries-DH7lyW9y.js");
+const Route$3 = createFileRoute("/novoyavorivsk-mysteries")({
+  head: () => ({
+    meta: [{
+      title: "Новояворівськ: Сірчане прокляття · ТемнаГеографія"
+    }, {
+      name: "description",
+      content: "Місто виросло з нічого у 1965 році — над найбільшим покладом самородної сірки в Європі. Коли кар'єр вичерпали і затопили, деякі жителі запевняють: щось лишилося внизу."
+    }]
+  }),
+  component: lazyRouteComponent($$splitComponentImporter$3, "component")
+});
+const $$splitComponentImporter$2 = () => import("./index-CvLQNe13.js");
+const Route$2 = createFileRoute("/")({
+  component: lazyRouteComponent($$splitComponentImporter$2, "component")
+});
+const $$splitComponentImporter$1 = () => import("./posts._slug-BGJPPnvY.js");
+marked.use(gfmHeadingId());
 const Route$1 = createFileRoute("/posts/$slug")({
   head: ({
     loaderData: post
   }) => {
     if (!post) return {};
+    const p = post;
     return {
       meta: [{
-        title: `${post.title} | ТемнаГеографія`
+        title: `${p.title} | ТемнаГеографія`
       }, {
         name: "description",
-        content: post.summary
+        content: p.summary
       }, {
         name: "author",
-        content: post.author
+        content: p.author
       }, {
         property: "og:title",
-        content: post.title
+        content: p.title
       }, {
         property: "og:description",
-        content: post.summary
+        content: p.summary
       }, {
         property: "og:type",
         content: "article"
       }, {
         property: "article:published_time",
-        content: new Date(post.date).toISOString()
+        content: new Date(p.date).toISOString()
       }, {
         property: "article:author",
-        content: post.author
+        content: p.author
       }, {
         property: "article:section",
-        content: post.categories[0] ?? "Розслідування"
-      }, ...post.categories.map((cat) => ({
+        content: p.categories[0] ?? "Розслідування"
+      }, ...p.categories.map((cat) => ({
         property: "article:tag",
         content: cat
       }))]
@@ -512,7 +718,7 @@ const Route$1 = createFileRoute("/posts/$slug")({
   },
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-const $$splitComponentImporter = () => import("./category._category-CRj7KhS_.js");
+const $$splitComponentImporter = () => import("./category._category-C9CCWzED.js");
 const Route = createFileRoute("/category/$category")({
   head: ({
     params
@@ -536,27 +742,33 @@ const Route = createFileRoute("/category/$category")({
   },
   component: lazyRouteComponent($$splitComponentImporter, "component")
 });
+const NovoyavorivskMysteriesRoute = Route$3.update({
+  id: "/novoyavorivsk-mysteries",
+  path: "/novoyavorivsk-mysteries",
+  getParentRoute: () => Route$4
+});
 const IndexRoute = Route$2.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$3
+  getParentRoute: () => Route$4
 });
 const PostsSlugRoute = Route$1.update({
   id: "/posts/$slug",
   path: "/posts/$slug",
-  getParentRoute: () => Route$3
+  getParentRoute: () => Route$4
 });
 const CategoryCategoryRoute = Route.update({
   id: "/category/$category",
   path: "/category/$category",
-  getParentRoute: () => Route$3
+  getParentRoute: () => Route$4
 });
 const rootRouteChildren = {
   IndexRoute,
+  NovoyavorivskMysteriesRoute,
   CategoryCategoryRoute,
   PostsSlugRoute
 };
-const routeTree = Route$3._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$4._addFileChildren(rootRouteChildren)._addFileTypes();
 const getRouter = () => {
   const router2 = createRouter({
     routeTree,
@@ -570,8 +782,11 @@ const router = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   getRouter
 }, Symbol.toStringTag, { value: "Module" }));
 export {
+  Masthead as M,
   Route$1 as R,
-  Route as a,
-  allPosts as b,
+  SiteFooter as S,
+  allPosts as a,
+  Route as b,
+  formatDate as f,
   router as r
 };

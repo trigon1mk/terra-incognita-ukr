@@ -1,13 +1,13 @@
 # Build stage
-FROM node:24.16.0-alpine AS builder
+FROM node:26-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (with optional deps for better compatibility)
-RUN npm ci --include=optional
+# Install dependencies
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:24.16.0-alpine
+FROM node:26-alpine
 
 WORKDIR /app
 
@@ -28,6 +28,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/server-bridge.mjs ./server-bridge.mjs
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && \
@@ -49,5 +50,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
 # Use dumb-init to handle signals
 ENTRYPOINT ["dumb-init", "--"]
 
-# Start the TanStack Start application
-CMD ["node", "dist/server/index.js"]
+# Start the TanStack Start application via the bridge
+CMD ["node", "server-bridge.mjs"]

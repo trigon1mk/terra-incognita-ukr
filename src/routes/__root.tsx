@@ -1,4 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { NotFound } from '@/components/not-found'
+import { ErrorComponent } from '@/components/error-component'
 import '../styles.css'
 
 const SITE_NAME = 'ТемнаГеографія'
@@ -34,6 +36,8 @@ export const Route = createRootRoute({
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     ],
   }),
+  errorComponent: ErrorComponent,
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
 

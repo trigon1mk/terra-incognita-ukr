@@ -1,37 +1,42 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { marked } from 'marked'
-import { allPosts } from 'content-collections'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { type Post, allPosts } from 'content-collections'
 import { Masthead, SiteFooter, formatDate } from '@/components/layout'
 import { useEffect } from 'react'
+
+marked.use(gfmHeadingId())
 
 export const Route = createFileRoute('/posts/$slug')({
   head: ({ loaderData: post }) => {
     if (!post) return {}
+    const p = post as Post
     return {
       meta: [
-        { title: `${post.title} | ТемнаГеографія` },
-        { name: 'description', content: post.summary },
-        { name: 'author', content: post.author },
-        { property: 'og:title', content: post.title },
-        { property: 'og:description', content: post.summary },
+        { title: `${p.title} | ТемнаГеографія` },
+        { name: 'description', content: p.summary },
+        { name: 'author', content: p.author },
+        { property: 'og:title', content: p.title },
+        { property: 'og:description', content: p.summary },
         { property: 'og:type', content: 'article' },
-        { property: 'article:published_time', content: new Date(post.date).toISOString() },
-        { property: 'article:author', content: post.author },
-        { property: 'article:section', content: post.categories[0] ?? 'Розслідування' },
-        ...post.categories.map((cat) => ({ property: 'article:tag', content: cat })),
+        { property: 'article:published_time', content: new Date(p.date).toISOString() },
+        { property: 'article:author', content: p.author },
+        { property: 'article:section', content: p.categories[0] ?? 'Розслідування' },
+        ...p.categories.map((cat) => ({ property: 'article:tag', content: cat })),
       ],
     }
   },
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<Post> => {
     const post = allPosts.find((p) => p.slug === params.slug)
     if (!post) throw new Error('Post not found')
-    return post
+    return post as Post
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const post = Route.useLoaderData()
+  const post = Route.useLoaderData() as Post
+  if (!post) return null
 
   const related = allPosts
     .filter(
@@ -127,7 +132,7 @@ function RouteComponent() {
           </div>
           <div className="related-grid">
             {related.map((r) => (
-              <Link to={`/posts/${r.slug}`} key={r.slug} className="related-card">
+              <Link to="/posts/$slug" params={{ slug: r.slug }} key={r.slug} className="related-card">
                 <div className="related-tag">{r.categories[0]}</div>
                 <div className="related-title">{r.title}</div>
                 <div className="related-excerpt">{r.summary}</div>

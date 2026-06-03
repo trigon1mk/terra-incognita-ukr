@@ -1,0 +1,329 @@
+/* Novoyavorivsk Mysteries Specific Styles */
+
+.novoyavorivsk-page {
+  --pitch: #0d0c0a;
+  --parchment: #f0ead8;
+  --sulfur: #d4a017;
+  --sulfur-dark: #9f7a0d;
+  --ash: #1a1914;
+  --smoke: #2e2d28;
+  --fog: #7a7668;
+  --blood: #8b3a3a;
+  
+  background: var(--pitch);
+  color: var(--parchment);
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.novoyavorivsk-page a {
+  color: var(--sulfur);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.novoyavorivsk-page a:hover {
+  color: var(--parchment);
+}
+
+.novoyavorivsk-page h1, 
+.novoyavorivsk-page h2, 
+.novoyavorivsk-page h3, 
+.novoyavorivsk-page h4, 
+.novoyavorivsk-page h5, 
+.novoyavorivsk-page h6 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  color: var(--parchment);
+  margin: 24px 0 16px;
+}
+
+.novoyavorivsk-page h1 {
+  font-size: 56px;
+  line-height: 1.1;
+}
+
+.novoyavorivsk-page h2 {
+  font-size: 36px;
+  margin-top: 40px;
+}
+
+.novoyavorivsk-page p {
+  margin-bottom: 18px;
+}
+
+.hero {
+  position: relative;
+  padding: 100px 40px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--ash) 0%, var(--pitch) 100%);
+  border-bottom: 1px solid var(--smoke);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(212, 160, 23, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sulfur-dark);
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: 60px;
+  line-height: 1.15;
+  margin: 24px 0;
+  font-weight: 700;
+}
+
+.hero-title em {
+  color: var(--sulfur);
+  font-style: italic;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  max-width: 800px;
+  margin: 24px auto;
+  color: #9a8f80;
+  line-height: 1.7;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin: 32px 0;
+  flex-wrap: wrap;
+}
+
+.author-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sulfur);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pitch);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.author-info {
+  text-align: left;
+}
+
+.author-name {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--parchment);
+}
+
+.author-role {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--fog);
+  letter-spacing: 1px;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 12px;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--smoke);
+  padding: 6px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fog);
+  border: 1px solid var(--smoke);
+}
+
+.tag.red {
+  background: rgba(139, 26, 26, 0.1);
+  border-color: var(--blood);
+  color: var(--blood);
+}
+
+.scroll-hint {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--sulfur);
+  margin-top: 24px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.article-body {
+  font-size: 18px;
+  line-height: 1.85;
+}
+
+.article-body p {
+  margin-bottom: 24px;
+}
+
+.section-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 60px 0;
+  text-align: center;
+}
+
+.section-rule span {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sulfur-dark);
+  padding: 0 16px;
+}
+
+.section-rule::before,
+.section-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--smoke);
+}
+
+.sidebar-fact {
+  float: right;
+  width: 280px;
+  margin: 8px 0 32px 40px;
+  background: #13120e;
+  border-top: 2px solid var(--sulfur);
+  padding: 24px;
+}
+
+.sidebar-fact-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sulfur);
+  margin-bottom: 12px;
+}
+
+.sidebar-fact p {
+  font-size: 14px;
+  color: #9a9280;
+  margin: 0;
+  line-height: 1.65;
+}
+
+.doc-box {
+  background: #13120e;
+  border-left: 4px solid var(--sulfur-dark);
+  padding: 24px;
+  margin: 32px 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.doc-box p {
+  margin-bottom: 12px;
+}
+
+.doc-source {
+  font-size: 10px;
+  color: var(--fog);
+  margin-top: 12px;
+  font-style: italic;
+}
+
+.pullquote {
+  border-left: 3px solid var(--sulfur);
+  padding-left: 24px;
+  margin: 32px 0;
+  font-style: italic;
+  font-size: 20px;
+  color: #a89878;
+}
+
+.pullquote cite {
+  display: block;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--fog);
+  margin-top: 8px;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1px;
+}
+
+.evidence-row {
+  display: flex;
+  gap: 16px;
+  margin: 40px 0;
+  align-items: flex-start;
+}
+
+.evidence-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  color: var(--smoke);
+  line-height: 1;
+  min-width: 60px;
+  text-align: center;
+}
+
+.evidence-content h4 {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--parchment);
+  margin-bottom: 8px;
+}
+
+.evidence-content p {
+  font-size: 16px;
+  color: var(--fog);
+  margin: 0;
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 60px 24px; }
+  .hero-title { font-size: 42px; }
+  .location-grid { grid-template-columns: 1fr; }
+  .sidebar-fact { float: none; width: 100%; margin: 24px 0; }
+  .hero-meta { flex-direction: column; gap: 24px; }
+}

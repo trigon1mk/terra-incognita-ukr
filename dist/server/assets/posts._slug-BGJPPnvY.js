@@ -1,11 +1,14 @@
 import { jsxs, Fragment, jsx } from "react/jsx-runtime";
 import { Link } from "@tanstack/react-router";
 import { marked } from "marked";
-import { R as Route, b as allPosts } from "./router-W1L3Z6l5.js";
-import { M as Masthead, f as formatDate, S as SiteFooter } from "./layout-DA_p23f6.js";
+import { R as Route, a as allPosts, M as Masthead, f as formatDate, S as SiteFooter } from "./router-BlmVjKJO.js";
 import { useEffect } from "react";
+import "lucide-react";
+import "fuse.js";
+import "marked-gfm-heading-id";
 function RouteComponent() {
   const post = Route.useLoaderData();
+  if (!post) return null;
   const related = allPosts.filter((p) => p.slug !== post.slug && p.categories.some((c) => post.categories.includes(c))).slice(0, 3);
   useEffect(() => {
     const bar = document.getElementById("reading-bar");
@@ -68,7 +71,9 @@ function RouteComponent() {
     ] }),
     related.length > 0 && /* @__PURE__ */ jsxs("section", { className: "related-section", children: [
       /* @__PURE__ */ jsx("div", { className: "section-rule", children: /* @__PURE__ */ jsx("span", { children: "Читайте також" }) }),
-      /* @__PURE__ */ jsx("div", { className: "related-grid", children: related.map((r) => /* @__PURE__ */ jsxs(Link, { to: `/posts/${r.slug}`, className: "related-card", children: [
+      /* @__PURE__ */ jsx("div", { className: "related-grid", children: related.map((r) => /* @__PURE__ */ jsxs(Link, { to: "/posts/$slug", params: {
+        slug: r.slug
+      }, className: "related-card", children: [
         /* @__PURE__ */ jsx("div", { className: "related-tag", children: r.categories[0] }),
         /* @__PURE__ */ jsx("div", { className: "related-title", children: r.title }),
         /* @__PURE__ */ jsx("div", { className: "related-excerpt", children: r.summary })

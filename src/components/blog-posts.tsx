@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { type Post } from 'content-collections'
 import { Masthead, SiteFooter, formatDate } from './layout'
+import { UkraineMap } from './ukraine-map'
 
 const ALL_CATEGORIES = [
   'Розслідування',
@@ -10,8 +11,6 @@ const ALL_CATEGORIES = [
   'Хімія та містика',
   'Архіви та документи',
 ]
-
-const GLYPHS = ['⬡', '◈', '⬢', '✦', '◉']
 
 export default function BlogPosts({ title, posts }: { title: string; posts: Post[] }) {
   const featured = posts.find((p) => p.featured) ?? posts[0]
@@ -43,6 +42,7 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
               аномальні зони — те, що не потрапляє до підручників.
             </p>
           )}
+          {isHome && <UkraineMap />}
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
               {isHome ? 'Головний матеріал' : `Матеріали: ${title}`}
             </div>
 
-            <Link to={`/posts/${featured.slug}`} className="featured-card">
+            <Link to="/posts/$slug" params={{ slug: featured.slug }} className="featured-card">
               <div className="featured-visual">
                 <span className="featured-visual-glyph" aria-hidden="true">
                   ◈
@@ -79,8 +79,8 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
               {isHome ? 'Всі матеріали' : 'Інші публікації'}
             </div>
             <div className="articles-grid">
-              {rest.map((post, i) => (
-                <Link to={`/posts/${post.slug}`} key={post._meta.path} className="article-card">
+              {rest.map((post) => (
+                <Link to="/posts/$slug" params={{ slug: post.slug }} key={post._meta.path} className="article-card">
                   <div className="card-category">{post.categories[0]}</div>
                   <h3 className="card-title">{post.title}</h3>
                   <p className="card-excerpt">{post.summary}</p>
@@ -106,7 +106,7 @@ export default function BlogPosts({ title, posts }: { title: string; posts: Post
           <div className="section-label">Рубрики</div>
           <div className="cats-list">
             {ALL_CATEGORIES.map((cat) => (
-              <Link to={`/category/${cat}`} key={cat} className="cat-pill">
+              <Link to="/category/$category" params={{ category: cat }} key={cat} className="cat-pill">
                 {cat}
               </Link>
             ))}
